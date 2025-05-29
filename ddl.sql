@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS dim_pet_type CASCADE;
 DROP TABLE IF EXISTS dim_pet_category CASCADE;
 DROP TABLE IF EXISTS dim_date CASCADE;
 
--- Таблица дат
 CREATE TABLE dim_date (
     date_id SERIAL PRIMARY KEY,
     date_actual DATE UNIQUE NOT NULL,
@@ -26,19 +25,16 @@ CREATE TABLE dim_date (
     is_weekend BOOLEAN NOT NULL
 );
 
--- Категории питомцев
 CREATE TABLE dim_pet_category (
     pet_category_id SERIAL PRIMARY KEY,
     category_name TEXT UNIQUE NOT NULL
 );
 
--- Типы животных (pet_type)
 CREATE TABLE dim_pet_type (
     pet_type_id SERIAL PRIMARY KEY,
     type_name TEXT UNIQUE NOT NULL
 );
 
--- Измерение питомцев
 CREATE TABLE dim_pet (
     pet_id SERIAL PRIMARY KEY,
     pet_type_id INT REFERENCES dim_pet_type(pet_type_id),
@@ -47,7 +43,6 @@ CREATE TABLE dim_pet (
     pet_category_id INT REFERENCES dim_pet_category(pet_category_id)
 );
 
--- Клиенты
 CREATE TABLE dim_customer (
     customer_id SERIAL PRIMARY KEY,
     first_name TEXT,
@@ -58,7 +53,6 @@ CREATE TABLE dim_customer (
     postal_code TEXT
 );
 
--- Продавцы
 CREATE TABLE dim_seller (
     seller_id SERIAL PRIMARY KEY,
     first_name TEXT,
@@ -68,7 +62,6 @@ CREATE TABLE dim_seller (
     postal_code TEXT
 );
 
--- Поставщики
 CREATE TABLE dim_supplier (
     supplier_id SERIAL PRIMARY KEY,
     name TEXT,
@@ -92,37 +85,31 @@ CREATE TABLE dim_store (
 );
 
 
--- Категории продуктов
 CREATE TABLE dim_product_category (
     product_category_id SERIAL PRIMARY KEY,
     category_name TEXT UNIQUE NOT NULL
 );
 
--- Бренды
 CREATE TABLE dim_product_brand (
     brand_id SERIAL PRIMARY KEY,
     brand_name TEXT UNIQUE NOT NULL
 );
 
--- Материалы
 CREATE TABLE dim_product_material (
     material_id SERIAL PRIMARY KEY,
     material_name TEXT UNIQUE NOT NULL
 );
 
--- Размеры
 CREATE TABLE dim_product_size (
     size_id SERIAL PRIMARY KEY,
     size_name TEXT UNIQUE NOT NULL
 );
 
--- Цвета
 CREATE TABLE dim_product_color (
     color_id SERIAL PRIMARY KEY,
     color_name TEXT UNIQUE NOT NULL
 );
 
--- Продукты
 CREATE TABLE dim_product (
     product_id SERIAL PRIMARY KEY,
     name TEXT,
@@ -140,7 +127,6 @@ CREATE TABLE dim_product (
     expiry_date_id INT REFERENCES dim_date(date_id)
 );
 
--- Таблица фактов продаж
 CREATE TABLE fact_sales (
     sale_id SERIAL PRIMARY KEY,
     sale_date_id INT REFERENCES dim_date(date_id),

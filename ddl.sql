@@ -73,7 +73,7 @@ CREATE TABLE dim_supplier (
     supplier_id SERIAL PRIMARY KEY,
     name TEXT,
     contact TEXT,
-    email TEXT UNIQUE, -- добавлено
+    email TEXT UNIQUE,
     phone TEXT,
     address TEXT,
     city TEXT,

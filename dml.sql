@@ -1,4 +1,3 @@
--- Вставка дат из sale_date
 INSERT INTO dim_date (date_actual, year, quarter, month, day, weekday, is_weekend)
 SELECT DISTINCT
     sale_date::date,
@@ -15,7 +14,6 @@ FROM (
 WHERE sale_date IS NOT NULL
 ON CONFLICT (date_actual) DO NOTHING;
 
--- Вставка дат из product_release_date
 INSERT INTO dim_date (date_actual, year, quarter, month, day, weekday, is_weekend)
 SELECT DISTINCT
     release_date::date,
@@ -32,7 +30,6 @@ FROM (
 WHERE release_date IS NOT NULL
 ON CONFLICT (date_actual) DO NOTHING;
 
--- Вставка дат из product_expiry_date
 INSERT INTO dim_date (date_actual, year, quarter, month, day, weekday, is_weekend)
 SELECT DISTINCT
     expiry_date::date,
@@ -49,56 +46,48 @@ FROM (
 WHERE expiry_date IS NOT NULL
 ON CONFLICT (date_actual) DO NOTHING;
 
--- Вставка в dim_pet_category
 INSERT INTO dim_pet_category (category_name)
 SELECT DISTINCT pet_category
 FROM mock_data
 WHERE pet_category IS NOT NULL AND pet_category <> ''
 ON CONFLICT (category_name) DO NOTHING;
 
--- Вставка в dim_pet_type
 INSERT INTO dim_pet_type (type_name)
 SELECT DISTINCT customer_pet_type
 FROM mock_data
 WHERE customer_pet_type IS NOT NULL AND customer_pet_type <> ''
 ON CONFLICT (type_name) DO NOTHING;
 
--- Вставка в dim_product_category
 INSERT INTO dim_product_category (category_name)
 SELECT DISTINCT product_category
 FROM mock_data
 WHERE product_category IS NOT NULL AND product_category <> ''
 ON CONFLICT (category_name) DO NOTHING;
 
--- Вставка в dim_product_brand
 INSERT INTO dim_product_brand (brand_name)
 SELECT DISTINCT product_brand
 FROM mock_data
 WHERE product_brand IS NOT NULL AND product_brand <> ''
 ON CONFLICT (brand_name) DO NOTHING;
 
--- Вставка в dim_product_material
 INSERT INTO dim_product_material (material_name)
 SELECT DISTINCT product_material
 FROM mock_data
 WHERE product_material IS NOT NULL AND product_material <> ''
 ON CONFLICT (material_name) DO NOTHING;
 
--- Вставка в dim_product_size
 INSERT INTO dim_product_size (size_name)
 SELECT DISTINCT product_size
 FROM mock_data
 WHERE product_size IS NOT NULL AND product_size <> ''
 ON CONFLICT (size_name) DO NOTHING;
 
--- Вставка в dim_product_color
 INSERT INTO dim_product_color (color_name)
 SELECT DISTINCT product_color
 FROM mock_data
 WHERE product_color IS NOT NULL AND product_color <> ''
 ON CONFLICT (color_name) DO NOTHING;
 
--- Вставка в dim_customer
 INSERT INTO dim_customer (first_name, last_name, age, email, country, postal_code)
 SELECT DISTINCT
     customer_first_name,
@@ -111,7 +100,6 @@ FROM mock_data
 WHERE customer_email IS NOT NULL AND customer_email <> ''
 ON CONFLICT (email) DO NOTHING;
 
--- Вставка в dim_seller
 INSERT INTO dim_seller (first_name, last_name, email, country, postal_code)
 SELECT DISTINCT
     seller_first_name,
@@ -123,7 +111,6 @@ FROM mock_data
 WHERE seller_email IS NOT NULL AND seller_email <> ''
 ON CONFLICT (email) DO NOTHING;
 
--- Вставка в dim_supplier
 INSERT INTO dim_supplier (name, contact, email, phone, address, city, country)
 SELECT DISTINCT
     supplier_name,
@@ -137,7 +124,6 @@ FROM mock_data
 WHERE supplier_email IS NOT NULL AND supplier_email <> ''
 ON CONFLICT (email) DO NOTHING;
 
--- Вставка в dim_store
 INSERT INTO dim_store (name, location, city, state, country, phone, email)
 SELECT DISTINCT
     store_name,
@@ -151,7 +137,6 @@ FROM mock_data
 WHERE store_email IS NOT NULL AND store_email <> ''
 ON CONFLICT (email) DO NOTHING;
 
--- Вставка в dim_pet
 INSERT INTO dim_pet (pet_type_id, name, breed, pet_category_id)
 SELECT DISTINCT
     pt.pet_type_id,
@@ -163,7 +148,6 @@ LEFT JOIN dim_pet_type pt ON pt.type_name = md.customer_pet_type
 LEFT JOIN dim_pet_category pc ON pc.category_name = md.pet_category
 WHERE md.customer_pet_name IS NOT NULL AND md.customer_pet_name <> '';
 
--- Вставка в dim_product
 INSERT INTO dim_product (
     name, category_id, price, weight, color_id, size_id, brand_id, material_id,
     description, rating, reviews, release_date_id, expiry_date_id
@@ -192,7 +176,6 @@ LEFT JOIN dim_date dr ON dr.date_actual = to_date(md.product_release_date, 'MM/D
 LEFT JOIN dim_date de ON de.date_actual = to_date(md.product_expiry_date, 'MM/DD/YYYY')
 WHERE md.product_name IS NOT NULL AND md.product_name <> '';
 
--- Вставка в fact_sales
 INSERT INTO fact_sales (
     sale_date_id, customer_id, seller_id, product_id, store_id, supplier_id, sale_quantity, sale_total_price
 )
